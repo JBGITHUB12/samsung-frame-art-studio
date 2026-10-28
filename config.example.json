@@ -1,0 +1,27 @@
+{
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8098,
+    "data_dir": "./data",
+    "epaper_output_dir": "./data/epaper"
+  },
+  "tv": {
+    "ip": "192.168.1.100",
+    "name": "SamsungFrame",
+    "port": 8002,
+    "timeout": 15
+  },
+  "esp32": {
+    "enabled": false,
+    "ip": "192.168.1.101",
+    "button_endpoint": "/button/refresh_picture_display/press"
+  },
+  "home_assistant": {
+    "enabled": false,
+    "host": "192.168.1.50",
+    "port": 8123,
+    "token": "YOUR_HOME_ASSISTANT_LONG_LIVED_ACCESS_TOKEN",
+    "title_sensor_entity": "sensor.eink_picture_title",
+    "refresh_button_entity": "button.e_ink_refresh_picture_display"
+  }
+}

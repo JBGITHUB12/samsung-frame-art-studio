@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Frame — Living Nature Canvas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            color: #fff;
+        }
+
+        /* Seamless Video Containers */
+        .stage {
+            position: absolute;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+        }
+
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            transition: opacity 1.2s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        video.active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        video.outgoing {
+            opacity: 0;
+            z-index: 1;
+        }
+
+        /* Ambient Glass HUD Pill */
+        .hud-overlay {
+            position: fixed;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            background: rgba(15, 18, 25, 0.72);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 9999px;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 1;
+        }
+
+        .hud-overlay.hidden {
+            opacity: 0;
+            transform: translate(-50%, -20px);
+            pointer-events: none;
+        }
+
+        .hud-info {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            min-width: 240px;
+        }
+
+        .hud-title {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #f1f5f9;
+        }
+
+        .hud-meta {
+            font-size: 11px;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hud-meta .dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+
+        .btn-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hud-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #e2e8f0;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .hud-btn:hover, .hud-btn:focus {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.35);
+            color: #fff;
+            transform: scale(1.08);
+        }
+
+        .hud-btn.active {
+            background: rgba(16, 185, 129, 0.25);
+            border-color: #10b981;
+            color: #34d399;
+        }
+
+        /* Scenery Drawer Carousel */
+        .drawer {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            background: rgba(13, 16, 23, 0.78);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 16px 44px rgba(0, 0, 0, 0.7);
+            max-width: 90vw;
+            overflow-x: auto;
+            scrollbar-width: none;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .drawer::-webkit-scrollbar {
+            display: none;
+        }
+
+        .drawer.hidden {
+            opacity: 0;
+            transform: translate(-50%, 20px);
+            pointer-events: none;
+        }
+
+        .scenery-card {
+            flex: 0 0 110px;
+            height: 68px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        .scenery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.75);
+            transition: filter 0.25s ease;
+        }
+
+        .scenery-card:hover img, .scenery-card:focus img {
+            filter: brightness(1);
+        }
+
+        .scenery-card:hover, .scenery-card:focus {
+            transform: scale(1.06);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .scenery-card.active {
+            border-color: #38bdf8;
+            box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+        }
+
+        .scenery-card.active img {
+            filter: brightness(1);
+        }
+
+        .card-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 4px 6px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+            font-size: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #f1f5f9;
+        }
+
+        /* Remote TV Help Hint */
+        .remote-hint {
+            position: fixed;
+            bottom: 12px;
+            right: 18px;
+            z-index: 40;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.5px;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .remote-hint.hidden {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body onclick="wakeControls()" onmousemove="wakeControls()" onkeydown="handleKeyDown(event)">
+
+    <div class="stage">
+        <video id="videoA" class="active" loop playsinline muted></video>
+        <video id="videoB" loop playsinline muted></video>
+    </div>
+
+    <!-- Ambient HUD Pill -->
+    <div id="hud" class="hud-overlay">
+        <div class="hud-info">
+            <span id="currentTitle" class="hud-title">Emerald Grove Sanctuary</span>
+            <div class="hud-meta">
+                <span class="dot"></span>
+                <span id="currentCategory">Ancient Woodlands</span>
+                <span>•</span>
+                <span id="cycleTimerText">Looping</span>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="hud-btn" onclick="prevScene(event)" title="Previous Scene (Left Arrow)"><i class="fa-solid fa-backward-step"></i></button>
+            <button id="playPauseBtn" class="hud-btn" onclick="togglePlay(event)" title="Play / Pause (Space / OK)"><i class="fa-solid fa-pause"></i></button>
+            <button class="hud-btn" onclick="nextScene(event)" title="Next Scene (Right Arrow)"><i class="fa-solid fa-forward-step"></i></button>
+            <button id="cycleBtn" class="hud-btn" onclick="toggleAutoCycle(event)" title="Auto-advance (A)"><i class="fa-solid fa-clock-rotate-left"></i></button>
+            <button id="muteBtn" class="hud-btn" onclick="toggleAudio(event)" title="Audio Toggle (M)"><i class="fa-solid fa-volume-xmark"></i></button>
+            <button class="hud-btn" onclick="toggleFullscreen(event)" title="Fullscreen (F)"><i class="fa-solid fa-expand"></i></button>
+        </div>
+    </div>
+
+    <!-- Scenery Carousel Drawer -->
+    <div id="drawer" class="drawer">
+        <!-- Rendered dynamically -->
+    </div>
+
+    <div id="remoteHint" class="remote-hint">
+        Use ◀ ▶ arrows on Samsung Remote to switch loops • Press OK to Play/Pause
+    </div>
+
+    <script>
+        const SCENES = [
+            {
+                id: 'emerald_grove',
+                title: 'Emerald Grove Sanctuary',
+                category: 'Ancient Woodlands',
+                src: '/nature_art/emerald_grove.mp4',
+                poster: '/nature_art/emerald_grove.jpg'
+            },
+            {
+                id: 'autumn_bridge',
+                title: 'Autumn Stone Bridge',
+                category: 'River & Fall Colors',
+                src: '/nature_art/autumn_bridge.mp4',
+                poster: '/nature_art/autumn_bridge.jpg'
+            },
+            {
+                id: 'autumn_puddle',
+                title: 'Autumn Rain & Golden Leaves',
+                category: 'Rain & Reflections',
+                src: '/nature_art/autumn_puddle.mp4',
+                poster: '/nature_art/autumn_puddle.jpg'
+            },
+            {
+                id: 'mountain_lake',
+                title: 'Summer Mountain Lake',
+                category: 'Alpine Waters',
+                src: '/nature_art/mountain_lake.mp4',
+                poster: '/nature_art/mountain_lake.jpg'
+            },
+            {
+                id: 'breezing_ferns',
+                title: 'Gently Breezing Ferns',
+                category: 'Botanical Zen',
+                src: '/nature_art/breezing_ferns.mp4',
+                poster: '/nature_art/breezing_ferns.jpg'
+            },
+            {
+                id: 'aerial_whales',
+                title: 'Whales Beneath The Ocean',
+                category: 'Azure Sea Glider',
+                src: '/nature_art/aerial_whales.mp4',
+                poster: '/nature_art/aerial_whales.jpg'
+            },
+            {
+                id: 'cozy_night',
+                title: 'A Cozy Night Out',
+                category: 'Evening Twilight & Fire',
+                src: '/nature_art/cozy_night.mp4',
+                poster: '/nature_art/cozy_night.jpg'
+            },
+            {
+                id: 'forest_bus',
+                title: 'Overgrown Forest Sanctuary',
+                category: 'Reclaimed Nature',
+                src: '/nature_art/forest_bus.mp4',
+                poster: '/nature_art/forest_bus.jpg'
+            }
+        ];
+
+        let currentIndex = 0;
+        let activeVideo = document.getElementById('videoA');
+        let standbyVideo = document.getElementById('videoB');
+        let hideTimeout = null;
+        let autoCycleTimer = null;
+        let autoCycleMinutes = 0; // 0 = off, 5, 15, 30
+        let isAudioMuted = true;
+
+        function init() {
+            renderDrawer();
+            loadScene(0, false);
+            wakeControls();
+        }
+
+        function renderDrawer() {
+            const drawer = document.getElementById('drawer');
+            drawer.innerHTML = '';
+            SCENES.forEach((scene, index) => {
+                const card = document.createElement('div');
+                card.className = `scenery-card ${index === currentIndex ? 'active' : ''}`;
+                card.onclick = (e) => {
+                    e.stopPropagation();
+                    loadScene(index, true);
+                };
+                card.innerHTML = `
+                    <img src="${scene.poster}" alt="${scene.title}">
+                    <div class="card-label">${scene.title}</div>
+                `;
+                drawer.appendChild(card);
+            });
+        }
+
+        function loadScene(index, crossfade = true) {
+            currentIndex = index;
+            const scene = SCENES[index];
+
+            document.getElementById('currentTitle').textContent = scene.title;
+            document.getElementById('currentCategory').textContent = scene.category;
+
+            // Update drawer active highlight
+            document.querySelectorAll('.scenery-card').forEach((card, idx) => {
+                card.classList.toggle('active', idx === currentIndex);
+            });
+
+            if (!crossfade) {
+                activeVideo.src = scene.src;
+                activeVideo.muted = isAudioMuted;
+                activeVideo.play().catch(e => console.log('Autoplay deferred:', e));
+                return;
+            }
+
+            // Crossfade with dual video tags
+            standbyVideo.src = scene.src;
+            standbyVideo.muted = isAudioMuted;
+            standbyVideo.onloadeddata = () => {
+                standbyVideo.play().then(() => {
+                    standbyVideo.className = 'active';
+                    activeVideo.className = 'outgoing';
+
+                    setTimeout(() => {
+                        activeVideo.pause();
+                        activeVideo.src = '';
+                        // Swap references
+                        const temp = activeVideo;
+                        activeVideo = standbyVideo;
+                        standbyVideo = temp;
+                    }, 1200);
+                }).catch(e => console.log('Play err:', e));
+            };
+        }
+
+        function nextScene(e) {
+            if (e) e.stopPropagation();
+            wakeControls();
+            const next = (currentIndex + 1) % SCENES.length;
+            loadScene(next, true);
+        }
+
+        function prevScene(e) {
+            if (e) e.stopPropagation();
+            wakeControls();
+            const prev = (currentIndex - 1 + SCENES.length) % SCENES.length;
+            loadScene(prev, true);
+        }
+
+        function togglePlay(e) {
+            if (e) e.stopPropagation();
+            wakeControls();
+            const btn = document.getElementById('playPauseBtn');
+            if (activeVideo.paused) {
+                activeVideo.play();
+                btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            } else {
+                activeVideo.pause();
+                btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            }
+        }
+
+        function toggleAudio(e) {
+            if (e) e.stopPropagation();
+            wakeControls();
+            isAudioMuted = !isAudioMuted;
+            activeVideo.muted = isAudioMuted;
+            standbyVideo.muted = isAudioMuted;
+            const btn = document.getElementById('muteBtn');
+            if (isAudioMuted) {
+                btn.classList.remove('active');
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+            } else {
+                btn.classList.add('active');
+                btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            }
+        }
+
+        function toggleAutoCycle(e) {
+            if (e) e.stopPropagation();
+            wakeControls();
+            const cycles = [0, 5, 15, 30];
+            const currIdx = cycles.indexOf(autoCycleMinutes);
+            autoCycleMinutes = cycles[(currIdx + 1) % cycles.length];
+
+            const btn = document.getElementById('cycleBtn');
+            const cycleText = document.getElementById('cycleTimerText');
+
+            if (autoCycleTimer) clearInterval(autoCycleTimer);
+
+            if (autoCycleMinutes > 0) {
+                btn.classList.add('active');
+                cycleText.textContent = `Auto ${autoCycleMinutes}m`;
+                autoCycleTimer = setInterval(() => {
+                    nextScene();
+                }, autoCycleMinutes * 60 * 1000);
+            } else {
+                btn.classList.remove('active');
+                cycleText.textContent = 'Single Loop';
+            }
+        }
+
+        function toggleFullscreen(e) {
+            if (e) e.stopPropagation();
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen().catch(() => {});
+            }
+        }
+
+        function wakeControls() {
+            const hud = document.getElementById('hud');
+            const drawer = document.getElementById('drawer');
+            const hint = document.getElementById('remoteHint');
+
+            hud.classList.remove('hidden');
+            drawer.classList.remove('hidden');
+            hint.classList.remove('hidden');
+
+            if (hideTimeout) clearTimeout(hideTimeout);
+            hideTimeout = setTimeout(() => {
+                hud.classList.add('hidden');
+                drawer.classList.add('hidden');
+                hint.classList.add('hidden');
+            }, 3500);
+        }
+
+        function handleKeyDown(event) {
+            wakeControls();
+            switch (event.key) {
+                case 'ArrowRight':
+                case 'MediaTrackNext':
+                    nextScene();
+                    break;
+                case 'ArrowLeft':
+                case 'MediaTrackPrevious':
+                    prevScene();
+                    break;
+                case ' ':
+                case 'Enter':
+                case 'MediaPlayPause':
+                    togglePlay();
+                    break;
+                case 'm':
+                case 'M':
+                    toggleAudio();
+                    break;
+                case 'f':
+                case 'F':
+                    toggleFullscreen();
+                    break;
+                case 'a':
+                case 'A':
+                    toggleAutoCycle();
+                    break;
+                default:
+                    const num = parseInt(event.key);
+                    if (num >= 1 && num <= SCENES.length) {
+                        loadScene(num - 1, true);
+                    }
+                    break;
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

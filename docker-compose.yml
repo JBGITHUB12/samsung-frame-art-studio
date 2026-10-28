@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  frame-studio:
+    build: .
+    container_name: samsung-frame-studio
+    restart: unless-stopped
+    network_mode: host # host mode is recommended so daemon can discover and pair with Samsung TV WebSocket directly
+    environment:
+      - FRAME_TV_IP=192.168.1.100
+      - FRAME_TV_NAME=LivingRoomFrame
+      - FRAME_PORT=8098
+      - FRAME_DATA_DIR=/app/data
+    volumes:
+      - ./data:/app/data
+      - ./config.json:/app/config.json:ro

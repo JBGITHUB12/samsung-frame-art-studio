@@ -1,0 +1,17 @@
+[Unit]
+Description=Samsung The Frame Art Studio & Uploader Daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/samsung-frame-art-studio
+ExecStart=/usr/bin/python3 /opt/samsung-frame-art-studio/frame_art_daemon.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

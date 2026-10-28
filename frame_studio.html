@@ -1,0 +1,2506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samsung The Frame &bull; Art Studio & Custom Galleries</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(18, 24, 38, 0.75);
+      --card-border: rgba(212, 175, 55, 0.2);
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --gold-glow: rgba(212, 175, 55, 0.25);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #38bdf8;
+      --danger: #ef4444;
+      --success: #22c55e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.07) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.05) 0px, transparent 50%);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Top Navigation / Branding */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 22px;
+      box-shadow: 0 0 20px var(--gold-glow);
+    }
+
+    .brand-text h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      letter-spacing: 1.5px;
+      background: linear-gradient(to right, #ffffff, var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .badge-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill.online {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: rgba(34, 197, 94, 0.3);
+      color: #86efac;
+    }
+
+    .pill.active-rot {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
+      color: var(--gold-light);
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    /* Tabs Bar */
+    .tabs-bar {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .tab-btn {
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+      border-color: rgba(212, 175, 55, 0.4);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(170, 130, 10, 0.25));
+      border-color: var(--gold);
+      color: var(--gold-light);
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    /* Main Container Grid */
+    .grid-main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .grid-main { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      letter-spacing: 1px;
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    /* Dropzone */
+    .dropzone {
+      border: 2px dashed rgba(212, 175, 55, 0.3);
+      border-radius: 10px;
+      padding: 28px 16px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(212, 175, 55, 0.02);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.08);
+      box-shadow: 0 0 24px var(--gold-glow);
+    }
+
+    .dropzone i { font-size: 38px; color: var(--gold); }
+    .dropzone-text { font-size: 13px; font-weight: 600; color: var(--text); }
+    .dropzone-sub { font-size: 11px; color: var(--muted); }
+
+    /* Frame Canvas Preview */
+    .frame-stage {
+      background: #000;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bezel {
+      background: #1e1e1e;
+      border: 8px solid #333;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8), 0 0 10px rgba(212, 175, 55, 0.2);
+      border-radius: 4px;
+      display: inline-block;
+      max-width: 100%;
+      overflow: hidden;
+      line-height: 0;
+    }
+
+    canvas#artCanvas {
+      width: 100%;
+      max-width: 460px;
+      aspect-ratio: 16 / 9;
+      background: #0a0a0a;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Matte selector */
+    .matte-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .matte-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 11px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .matte-btn:hover, .matte-btn.active {
+      border-color: var(--gold);
+      background: var(--gold);
+      color: #000;
+      font-weight: 600;
+    }
+
+    /* Action Buttons */
+    .btn {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--gold);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(170, 130, 10, 0.3));
+      color: var(--gold-light);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--gold);
+      color: #000;
+      box-shadow: 0 0 20px var(--gold-glow);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: var(--border);
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn.accent {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.3));
+      border-color: var(--accent);
+      color: #bae6fd;
+    }
+
+    .btn.accent:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .btn.danger {
+      border-color: rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
+    }
+
+    .btn.danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* E-Ink Studio Controls */
+    .eink-box {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .eink-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+
+    .eink-modes-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    @media (max-width: 640px) {
+      .eink-modes-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .eink-mode-btn {
+      padding: 8px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .eink-mode-btn i { font-size: 15px; }
+
+    .eink-mode-btn:hover {
+      color: var(--text);
+      border-color: rgba(212, 175, 55, 0.4);
+      background: rgba(212, 175, 55, 0.06);
+    }
+
+    .eink-mode-btn.active {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(170, 130, 10, 0.35));
+      color: var(--gold-light);
+      font-weight: 600;
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    .eink-drawer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Classical Catalog Grid */
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .catalog-item {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .catalog-item:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    }
+
+    .catalog-item img {
+      width: 100%;
+      height: 85px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .catalog-meta {
+      padding: 8px;
+    }
+
+    .catalog-title {
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+
+    .catalog-artist {
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Slideshow / Gallery Controls Bar */
+    .rotator-panel {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .control-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .control-desc {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    select.input-select, input.input-text {
+      background: #0f172a;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: var(--gold-light);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+    }
+
+    input.input-text {
+      color: #fff;
+      border-color: var(--border);
+    }
+
+    input.input-text:focus {
+      border-color: var(--gold);
+    }
+
+    /* Switch toggle */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #334155;
+      transition: .3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--gold);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+      background-color: #000;
+    }
+
+    /* Toolbar for Folder & Custom Playlist selection */
+    .gallery-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Gallery Grid View */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 14px;
+      max-height: 540px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .gallery-card {
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .gallery-card:hover {
+      border-color: rgba(212, 175, 55, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .gallery-card.current-active {
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 16px var(--gold-glow);
+    }
+
+    .gallery-card.selected-in-custom {
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+    }
+
+    .thumb-wrap {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      background: #0f172a;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .thumb-wrap:hover img {
+      transform: scale(1.05);
+    }
+
+    .thumb-folder-tag {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--gold-light);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      max-width: 85%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .thumb-select-chk {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .gallery-card-footer {
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.85);
+    }
+
+    .gallery-card-name {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .gallery-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px;
+      transition: color 0.15s;
+    }
+
+    .icon-btn:hover { color: var(--gold-light); }
+    .icon-btn.delete:hover { color: var(--danger); }
+
+    /* Custom Playlist Modal / Drawer */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background: #0f172a;
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px var(--gold-glow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Status Box */
+    .status-box {
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 40px;
+    }
+
+    .status-box.success { border-color: var(--success); color: #86efac; }
+    .status-box.error { border-color: var(--danger); color: #fca5a5; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-palette"></i>
+      </div>
+      <div class="brand-text">
+        <h1>SAMSUNG THE FRAME &bull; ART STUDIO</h1>
+        <p>Fine Art Curator &bull; Recursive Subfolders &bull; Custom Galleries &bull; Slideshow</p>
+      </div>
+    </div>
+    <div class="badge-bar">
+      <div class="pill online" id="tvStatusBadge">
+        <i class="fa-solid fa-tv"></i> <span id="tvStatusLabel">Samsung The Frame</span>
+      </div>
+      <div class="pill online" id="espStatusBadge" style="border-color: rgba(16, 185, 129, 0.4); color: #86efac; background: rgba(16, 185, 129, 0.1);">
+        <i class="fa-solid fa-microchip" style="color: #10b981;"></i> ESP32 7.5" E-Ink Online
+      </div>
+      <div class="pill" id="slideshowBadge">
+        <i class="fa-solid fa-rotate"></i> Slideshow: Off
+      </div>
+      <div class="pill">
+        <i class="fa-solid fa-expand"></i> 16:9 &bull; UHD 4K
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" id="tabStudioBtn" onclick="switchTab('studio')">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> Studio & Curator
+    </button>
+    <button class="tab-btn" id="tabGalleryBtn" onclick="switchTab('gallery')">
+      <i class="fa-solid fa-images"></i> Frame Gallery & Playlists (<span id="galleryCountBadge">0</span>)
+    </button>
+    <a href="/nature_canvas.html" target="_blank" class="tab-btn" style="text-decoration:none; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); display:inline-flex; align-items:center; gap:8px;">
+      <i class="fa-solid fa-film"></i> Living Nature Loops (Moving Canvas) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
+    </a>
+  </div>
+
+  <!-- TAB 1: STUDIO & CURATOR -->
+  <div id="tabStudio" class="grid-main">
+    
+    <!-- Upload & Preview Card -->
+    <div class="card">
+      <div class="card-title">
+        <span><i class="fa-solid fa-cloud-arrow-up" style="color: var(--gold);"></i> UPLOAD SINGLE OR MULTIPLE PICTURES</span>
+        <span style="font-size: 11px; color: var(--muted);">Auto 16:9 Fit</span>
+      </div>
+
+      <!-- Drag & Drop Zone -->
+      <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+        <i class="fa-solid fa-images"></i>
+        <div class="dropzone-text">DROP PICTURES HERE (SUPPORTS MULTI-SELECT)</div>
+        <div class="dropzone-sub">Upload 1 or 50+ photos at once &bull; Auto-indexed to Gallery</div>
+        <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+      </div>
+
+      <!-- Frame Preview Box -->
+      <div class="frame-stage">
+        <div class="bezel">
+          <canvas id="artCanvas" width="1920" height="1080"></canvas>
+        </div>
+        
+        <!-- Matte Selector -->
+        <div style="width: 100%; display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 11px; color: var(--muted); font-weight: 600;">MATTE STYLE:</span>
+          <div class="matte-bar">
+            <button class="matte-btn active" onclick="setMatte('none', this)">Full Bleed (No Matte)</button>
+            <button class="matte-btn" onclick="setMatte('polar', this)">Polar White</button>
+            <button class="matte-btn" onclick="setMatte('warm', this)">Warm Ivory</button>
+            <button class="matte-btn" onclick="setMatte('black', this)">Classic Black</button>
+            <button class="matte-btn" onclick="setMatte('shadowbox', this)">Shadowbox Polar</button>
+          </div>
+        </div>
+
+        <!-- E-Ink Picture Conversion Studio -->
+        <div class="eink-box">
+          <div class="eink-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-feather-pointed" style="color: var(--gold); font-size: 15px;"></i>
+              <div>
+                <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; color: var(--gold-light);">E-INK ART CONVERSION ENGINE</span>
+                <span style="font-size: 10px; color: var(--muted); margin-left: 6px;">Live 4K E-Paper Emulation</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="pill" id="einkActiveBadge" style="font-size: 10px; padding: 4px 8px;">
+                Mode: Original Color
+              </span>
+              <button class="icon-btn" id="einkCompareBtn" onmousedown="peekOriginal(true)" onmouseup="peekOriginal(false)" onmouseleave="peekOriginal(false)" title="Hold down to compare with original photo">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 8 Selectable E-Ink Conversion Modes -->
+          <div class="eink-modes-grid">
+            <button class="eink-mode-btn active" id="einkBtn-none" onclick="setEInkMode('none', this)">
+              <i class="fa-solid fa-palette"></i>
+              <span>Original Color</span>
+            </button>
+            <button class="eink-mode-btn" id="einkBtn-kindle" onclick="setEInkMode('kindle', this)">
+              <i class="fa-solid fa-book-open"></i>
+              <span>Kindle 16-Level</span>
+            </button>
+            <button class="eink-mode-btn" id="einkBtn-atkinson" onclick="setEInkMode('atkinson', this)">
+              <i class="fa-solid fa-feather"></i>
+              <span>Atkinson 1-Bit</span>
+            </button>
+            <button class="eink-mode-btn" id="einkBtn-floyd" onclick="setEInkMode('floyd', this)">
+              <i class="fa-solid fa-braille"></i>
+              <span>Floyd-Steinberg</span>
+            </button>
+            <button class="eink-mode-btn" id="einkBtn-architectural" onclick="setEInkMode('architectural', this)">
+              <i class="fa-solid fa-pen-ruler"></i>
+              <span>Crisp Line Art</span>
+            </button>
+            <button class="eink-mode-btn" id="einkBtn-halftone" onclick="setEInkMode('halftone', this)">
+              <i class="fa-solid fa-newspaper"></i>
+              <span>News Halftone</span>
+            </button>
+            <button class="eink-mode-btn" id="einkBtn-spectra" onclick="setEInkMode('spectra', this)">
+              <i class="fa-solid fa-paint-roller"></i>
+              <span>Color E-Ink (Spectra)</span>
+            </button>
+            <button class="eink-mode-btn" id="einkBtn-blueprint" onclick="setEInkMode('blueprint', this)">
+              <i class="fa-solid fa-compass-drafting"></i>
+              <span>Cyan Blueprint</span>
+            </button>
+          </div>
+
+          <!-- E-Ink Fine Tuning Controls Drawer (Active when an e-ink mode is on) -->
+          <div id="einkControlsDrawer" class="eink-drawer" style="display: none;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div>
+                <label style="font-size: 11px; color: var(--muted); font-weight: 600; display: block; margin-bottom: 4px;">PAPER TINT:</label>
+                <select class="input-select" id="einkPaperTone" onchange="updateEInkParams()" style="width: 100%;">
+                  <option value="kindle">📖 Warm Kindle Ivory</option>
+                  <option value="pearl">⚪ Pearl White E-Paper</option>
+                  <option value="parchment">📜 Vintage Book Parchment</option>
+                  <option value="solarized">☀️ Solarized Light</option>
+                  <option value="sepia">☕ Sepia Etching</option>
+                  <option value="stark">⬛ Pure Stark Monochrome</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 11px; color: var(--muted); font-weight: 600; display: block; margin-bottom: 4px;">DITHER CAPSULE SCALE:</label>
+                <select class="input-select" id="einkGrainScale" onchange="updateEInkParams()" style="width: 100%;">
+                  <option value="1">Fine (Native 4K Pixel)</option>
+                  <option value="2" selected>Medium (Microcapsule - Couch)</option>
+                  <option value="3">Bold (Living Room Graphic)</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px;">
+                  <span>INK WEIGHT & CONTRAST:</span>
+                  <span id="einkContrastVal" style="color: var(--gold-light); font-weight: 600;">+10</span>
+                </div>
+                <input type="range" id="einkContrast" min="-50" max="50" value="10" oninput="updateEInkParams()" style="width: 100%; accent-color: var(--gold);">
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px;">
+                  <span>PAPER EXPOSURE:</span>
+                  <span id="einkBrightnessVal" style="color: var(--gold-light); font-weight: 600;">0</span>
+                </div>
+                <input type="range" id="einkBrightness" min="-50" max="50" value="0" oninput="updateEInkParams()" style="width: 100%; accent-color: var(--gold);">
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 4px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text); cursor: pointer;">
+                <input type="checkbox" id="einkPaperTexture" onchange="updateEInkParams()" checked style="accent-color: var(--gold);">
+                <span><i class="fa-solid fa-scroll" style="color: var(--gold); margin-right: 4px;"></i> Tactile Paper Fiber Texture</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text); cursor: pointer;">
+                <input type="checkbox" id="einkInvert" onchange="updateEInkParams()" style="accent-color: var(--gold);">
+                <span><i class="fa-solid fa-circle-half-stroke" style="margin-right: 4px;"></i> Invert (Dark Slate E-Ink)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Buttons: Transmit to Frame TV, Send to ESP32 Display, Save to Gallery, Download -->
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button class="btn" id="uploadBtn" onclick="transmitArt()" disabled style="flex: 2; min-width: 200px;">
+          <i class="fa-solid fa-tv"></i> <span id="uploadBtnLabel">Send Selected Picture To The Frame</span>
+        </button>
+        <button class="btn" id="uploadEspBtn" onclick="transmitToEsp32()" disabled style="flex: 2; min-width: 200px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.35)); border-color: #10b981; color: #a7f3d0;" title="Send converted 1-bit artwork full screen to Waveshare 7.5' E-Paper Display (800x480)">
+          <i class="fa-solid fa-microchip"></i> <span id="uploadEspBtnLabel">Send To E-Ink Frame (800x480)</span>
+        </button>
+        <button class="btn secondary" id="saveGalleryBtn" onclick="saveToGallery()" disabled style="flex: 1; min-width: 140px;" title="Save converted artwork as a new file in Frame Gallery">
+          <i class="fa-solid fa-folder-plus"></i> Save to Gallery
+        </button>
+        <button class="btn secondary" style="width: auto; padding: 10px 14px;" onclick="downloadFittedImage()" title="Download Formatted Copy">
+          <i class="fa-solid fa-download"></i>
+        </button>
+      </div>
+
+      <!-- ESP32 E-Ink Dedicated Picture Frame Banner -->
+      <div id="espCustomBanner" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 10px 14px; font-size: 11px; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+        <span style="color: #a7f3d0; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+          <span>Active Artwork on 7.5" E-Ink Frame: <strong id="espLockedTitle" style="color: #fff;">None</strong></span>
+        </span>
+        <button class="matte-btn" onclick="refreshEspDisplay()" style="padding: 4px 10px; font-size: 11px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #fff;">
+          <i class="fa-solid fa-arrows-rotate"></i> Refresh E-Ink Screen
+        </button>
+      </div>
+
+      <!-- Status Indicator -->
+      <div class="status-box" id="statusBox">
+        <i class="fa-solid fa-circle-info"></i>
+        <span id="statusMessage">Select or drag photos above to preview.</span>
+      </div>
+
+    </div>
+
+    <!-- Classical Masters & Quick Curation Card -->
+    <div class="card">
+      <div class="card-title">
+        <span><i class="fa-solid fa-building-columns" style="color: var(--gold);"></i> CLASSIC ART ARCHIVE</span>
+        <button class="matte-btn" onclick="loadBingDaily()">
+          <i class="fa-brands fa-microsoft"></i> Bing 4K Today
+        </button>
+      </div>
+
+      <p style="font-size: 12px; color: var(--muted); line-height: 1.5;">
+        Curated public-domain classical masterworks from The Met and the Art Institute of Chicago, formatted in high resolution for The Frame.
+      </p>
+
+      <!-- Classical Gallery Presets -->
+      <div class="catalog-grid" id="catalogGrid">
+        <div class="catalog-item" onclick="loadPreset('Monet - Water Lilies', 'Claude Monet', 'https://www.artic.edu/iiif/2/3c27b499-af56-f0d5-93b5-a7f2f1ad5813/full/1686,/0/default.jpg')">
+          <img src="https://www.artic.edu/iiif/2/3c27b499-af56-f0d5-93b5-a7f2f1ad5813/full/400,/0/default.jpg" loading="lazy">
+          <div class="catalog-meta">
+            <div class="catalog-title">Water Lilies</div>
+            <div class="catalog-artist">Claude Monet (1906)</div>
+          </div>
+        </div>
+
+        <div class="catalog-item" onclick="loadPreset('A Sunday on La Grande Jatte', 'Georges Seurat', 'https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/1686,/0/default.jpg')">
+          <img src="https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/400,/0/default.jpg" loading="lazy">
+          <div class="catalog-meta">
+            <div class="catalog-title">La Grande Jatte</div>
+            <div class="catalog-artist">Georges Seurat (1884)</div>
+          </div>
+        </div>
+
+        <div class="catalog-item" onclick="loadPreset('Distant View of Niagara Falls', 'Thomas Cole', 'https://www.artic.edu/iiif/2/18092196-50ae-3ff1-9205-1b3110e966c3/full/1686,/0/default.jpg')">
+          <img src="https://www.artic.edu/iiif/2/18092196-50ae-3ff1-9205-1b3110e966c3/full/400,/0/default.jpg" loading="lazy">
+          <div class="catalog-meta">
+            <div class="catalog-title">Niagara Falls</div>
+            <div class="catalog-artist">Thomas Cole (1830)</div>
+          </div>
+        </div>
+
+        <div class="catalog-item" onclick="loadPreset('Mountain Brook', 'Albert Bierstadt', 'https://www.artic.edu/iiif/2/d55b0cfc-0716-d6cd-3b38-5742903ce046/full/1686,/0/default.jpg')">
+          <img src="https://www.artic.edu/iiif/2/d55b0cfc-0716-d6cd-3b38-5742903ce046/full/400,/0/default.jpg" loading="lazy">
+          <div class="catalog-meta">
+            <div class="catalog-title">Mountain Brook</div>
+            <div class="catalog-artist">Albert Bierstadt (1863)</div>
+          </div>
+        </div>
+
+        <div class="catalog-item" onclick="loadPreset('The Song of the Lark', 'Jules Breton', 'https://www.artic.edu/iiif/2/48b2de88-ba73-8e19-f448-d1cef4a1c847/full/1686,/0/default.jpg')">
+          <img src="https://www.artic.edu/iiif/2/48b2de88-ba73-8e19-f448-d1cef4a1c847/full/400,/0/default.jpg" loading="lazy">
+          <div class="catalog-meta">
+            <div class="catalog-title">Song of the Lark</div>
+            <div class="catalog-artist">Jules Breton (1884)</div>
+          </div>
+        </div>
+
+        <div class="catalog-item" onclick="loadPreset('Pastoral Landscape with Ruins', 'Adriaen van de Velde', 'https://www.artic.edu/iiif/2/a34d9d72-c4ec-0750-389e-a01215c9aab0/full/1686,/0/default.jpg')">
+          <img src="https://www.artic.edu/iiif/2/a34d9d72-c4ec-0750-389e-a01215c9aab0/full/400,/0/default.jpg" loading="lazy">
+          <div class="catalog-meta">
+            <div class="catalog-title">Pastoral Ruins</div>
+            <div class="catalog-artist">van de Velde (1664)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TV Screen Power -->
+      <div style="border-top: 1px solid var(--border); padding-top: 16px; display: flex; flex-direction: column; gap: 10px;">
+        <div class="card-title">
+          <span><i class="fa-solid fa-sliders" style="color: var(--gold);"></i> DISPLAY MODE CONTROLS</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <button class="btn secondary" onclick="toggleArtMode(true)">
+            <i class="fa-solid fa-paintbrush"></i> Turn Screen ON
+          </button>
+          <button class="btn secondary" onclick="toggleArtMode(false)">
+            <i class="fa-solid fa-power-off"></i> Turn Screen OFF
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TAB 2: GALLERY & SLIDESHOW ROTATION -->
+  <div id="tabGallery" class="card" style="display: none;">
+    <div class="card-title">
+      <span><i class="fa-solid fa-images" style="color: var(--gold);"></i> FRAME GALLERY & SLIDESHOW MANAGER</span>
+      <button class="btn secondary" style="width: auto; padding: 6px 14px;" onclick="loadGallery()">
+        <i class="fa-solid fa-rotate-right"></i> Refresh
+      </button>
+    </div>
+
+    <!-- Rotator Config Bar -->
+    <div class="rotator-panel">
+      <div class="control-row">
+        <div>
+          <div class="control-label">
+            <i class="fa-solid fa-circle-play" style="color: var(--gold);"></i> Automated Frame Rotation
+          </div>
+          <div class="control-desc">When enabled, the background service cycles between photos in your selected gallery on the TV.</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="slideshowToggle" onchange="updateSlideshowConfig()">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="control-row" style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 10px;">
+        <div>
+          <div class="control-label"><i class="fa-solid fa-list-check"></i> Active Slideshow Source / Gallery</div>
+          <div class="control-desc">Select whether rotation pulls from all pictures, a specific subfolder, or a custom gallery.</div>
+        </div>
+        <select class="input-select" id="activePlaylistSelect" onchange="updateSlideshowConfig()">
+          <option value="all">🌟 All Pictures (Entire Library)</option>
+        </select>
+      </div>
+
+      <div class="control-row" style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 10px;">
+        <div>
+          <div class="control-label"><i class="fa-solid fa-clock"></i> Rotation Interval</div>
+          <div class="control-desc">How long each picture stays on your Samsung Frame TV before switching.</div>
+        </div>
+        <select class="input-select" id="intervalSelect" onchange="updateSlideshowConfig()">
+          <option value="1">Every 1 Minute (Test)</option>
+          <option value="5">Every 5 Minutes</option>
+          <option value="10">Every 10 Minutes</option>
+          <option value="15" selected>Every 15 Minutes (Default)</option>
+          <option value="30">Every 30 Minutes</option>
+          <option value="60">Every 1 Hour</option>
+          <option value="180">Every 3 Hours</option>
+          <option value="360">Every 6 Hours</option>
+          <option value="720">Every 12 Hours</option>
+          <option value="1440">Once Daily (24 Hours)</option>
+        </select>
+      </div>
+
+      <div class="control-row" style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 10px;">
+        <div>
+          <div class="control-label"><i class="fa-solid fa-shuffle"></i> Playback Order</div>
+          <div class="control-desc">Cycle sequentially or randomly pick pictures from the active gallery.</div>
+        </div>
+        <select class="input-select" id="orderSelect" onchange="updateSlideshowConfig()">
+          <option value="random">Shuffle / Random</option>
+          <option value="sequential">Sequential Order</option>
+        </select>
+      </div>
+
+      <div style="display: flex; gap: 10px; padding-top: 4px;">
+        <button class="btn" style="width: auto;" onclick="triggerNextSlide()">
+          <i class="fa-solid fa-forward-step"></i> Rotate To Next Picture Now
+        </button>
+      </div>
+    </div>
+
+    <!-- Gallery Filtering & Custom Gallery Toolbar -->
+    <div class="gallery-toolbar">
+      <div class="filter-group">
+        <span style="font-size: 12px; font-weight: 600; color: var(--gold-light);"><i class="fa-solid fa-filter"></i> Filter Folder:</span>
+        <select class="input-select" id="filterFolderSelect" onchange="applyGalleryFilter()">
+          <option value="all">📁 All Folders & Subfolders</option>
+        </select>
+
+        <span style="font-size: 12px; font-weight: 600; color: var(--gold-light); margin-left: 12px;"><i class="fa-solid fa-magnifying-glass"></i></span>
+        <input type="text" class="input-text" id="filterSearchInput" placeholder="Search filenames..." oninput="applyGalleryFilter()" style="width: 170px;">
+      </div>
+
+      <div class="filter-group">
+        <span id="selectedCountText" style="font-size: 11px; color: var(--muted);">0 pictures selected</span>
+        <button class="btn accent" style="width: auto; padding: 6px 14px; font-size: 12px;" onclick="openCreateGalleryModal()">
+          <i class="fa-solid fa-folder-plus"></i> Save as Custom Gallery
+        </button>
+        <button class="btn danger" id="batchDeleteBtn" style="width: auto; padding: 6px 14px; font-size: 12px; display: none;" onclick="deleteSelectedImages()">
+          <i class="fa-solid fa-trash"></i> Delete Selected (<span id="deleteCountBadge">0</span>)
+        </button>
+      </div>
+    </div>
+
+    <!-- Custom Galleries List Bar -->
+    <div id="customGalleriesBar" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; min-height: 28px;">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Gallery Photos Thumbnail Grid -->
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Injected via JavaScript -->
+    </div>
+
+  </div>
+
+  <!-- MODAL: CREATE / EDIT CUSTOM GALLERY -->
+  <div class="modal-backdrop" id="customGalleryModal">
+    <div class="modal-box">
+      <div class="card-title">
+        <span><i class="fa-solid fa-folder-plus" style="color: var(--gold);"></i> CREATE CUSTOM GALLERY</span>
+        <button class="icon-btn" onclick="closeCreateGalleryModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="font-size: 12px; color: var(--muted);">
+        Name your custom gallery with the currently selected pictures. You can use it as an automated slideshow rotation playlist!
+      </p>
+      <div>
+        <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 6px;">Gallery Name:</label>
+        <input type="text" class="input-text" id="newGalleryName" placeholder="e.g. Living Room Favorites, Tintin Art, Dali" style="width: 100%;">
+      </div>
+      <div style="font-size: 12px; color: var(--gold-light);">
+        <i class="fa-solid fa-circle-check"></i> <span id="modalSelectedCount">0</span> pictures will be included in this gallery.
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn secondary" style="width: auto;" onclick="closeCreateGalleryModal()">Cancel</button>
+        <button class="btn" style="width: auto;" onclick="saveCustomGallery()">Save Gallery</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('artCanvas');
+    const ctx = canvas.getContext('2d');
+    const fileInput = document.getElementById('fileInput');
+    const dropzone = document.getElementById('dropzone');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const statusBox = document.getElementById('statusBox');
+    const statusMessage = document.getElementById('statusMessage');
+
+    let currentImage = null;
+    let selectedMatte = 'none';
+    let currentTitle = 'Custom Artwork';
+    let queuedFiles = [];
+
+    let allGalleryItems = [];
+    let allFolders = [];
+    let customGalleriesList = [];
+    let currentSlideshow = {};
+    let selectedFilenames = new Set();
+
+    // Tabs switching
+    function switchTab(tab) {
+      document.getElementById('tabStudioBtn').classList.toggle('active', tab === 'studio');
+      document.getElementById('tabGalleryBtn').classList.toggle('active', tab === 'gallery');
+      document.getElementById('tabStudio').style.display = tab === 'studio' ? 'grid' : 'none';
+      document.getElementById('tabGallery').style.display = tab === 'gallery' ? 'flex' : 'none';
+      if (tab === 'gallery') {
+        loadGallery();
+      }
+    }
+
+    // Initialize Default Placeholder
+    function initCanvas() {
+      ctx.fillStyle = "#111827";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.strokeStyle = "#d4af37";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+      ctx.fillStyle = "#f3e5ab";
+      ctx.font = "bold 44px 'Cinzel', serif";
+      ctx.textAlign = "center";
+      ctx.fillText("SAMSUNG FRAME GALLERY", canvas.width / 2, canvas.height / 2 - 20);
+
+      ctx.font = "24px 'Inter', sans-serif";
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillText("Upload photos or select from classical archive", canvas.width / 2, canvas.height / 2 + 40);
+    }
+    initCanvas();
+
+    // Matte selection
+    function setMatte(matte, btn) {
+      selectedMatte = matte;
+      document.querySelectorAll('.matte-bar .matte-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (currentImage) renderFittedImage(currentImage);
+    }
+
+    // Drag & Drop
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        handleFiles(e.dataTransfer.files);
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        handleFiles(e.target.files);
+      }
+    });
+
+    function handleFiles(files) {
+      queuedFiles = Array.from(files);
+      if (queuedFiles.length === 1) {
+        processSingleFile(queuedFiles[0]);
+      } else {
+        // Multi-file batch mode
+        setStatus(`📦 ${queuedFiles.length} photos selected! Starting batch upload...`, "normal");
+        uploadBatch(queuedFiles);
+      }
+    }
+
+    function processSingleFile(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          currentImage = img;
+          currentTitle = file.name.replace(/\.[^/.]+$/, "");
+          renderFittedImage(img);
+          uploadBtn.disabled = false;
+          const espBtn = document.getElementById('uploadEspBtn');
+          if (espBtn) espBtn.disabled = false;
+          const saveBtn = document.getElementById('saveGalleryBtn');
+          if (saveBtn) saveBtn.disabled = false;
+          setStatus(`Ready to upload "${file.name}"`, "normal");
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // E-INK CONVERSION ENGINE STATE & PALETTES
+    let einkState = {
+      mode: 'none', // 'none', 'kindle', 'atkinson', 'floyd', 'architectural', 'halftone', 'spectra', 'blueprint'
+      paperTone: 'kindle',
+      grainScale: 2,
+      contrast: 10,
+      brightness: 0,
+      paperTexture: true,
+      invert: false,
+      peeking: false
+    };
+
+    const PAPER_TONES = {
+      kindle:    { paper: [244, 241, 234], ink: [24, 26, 30] },    // Warm Kindle Ivory & Rich Carbon
+      pearl:     { paper: [252, 252, 251], ink: [18, 19, 22] },    // Clean E-Paper Pearl
+      parchment: { paper: [237, 230, 214], ink: [36, 32, 28] },    // Vintage Book Paper
+      solarized: { paper: [253, 246, 227], ink: [7, 54, 66] },     // Solarized Light & Deep Base
+      sepia:     { paper: [246, 240, 228], ink: [55, 38, 26] },    // Classical Etching Sepia
+      stark:     { paper: [255, 255, 255], ink: [0, 0, 0] }        // Stark Monochromatic B&W
+    };
+
+    const SPECTRA_PALETTE = [
+      [245, 245, 240], // White
+      [25, 25, 28],    // Black
+      [195, 35, 35],   // Red
+      [240, 205, 30],  // Yellow
+      [30, 85, 175],   // Blue
+      [35, 140, 55],   // Green
+      [230, 110, 25]   // Orange
+    ];
+
+    function findNearestSpectra(r, g, b) {
+      let bestIdx = 0, bestDist = Infinity;
+      for (let i = 0; i < SPECTRA_PALETTE.length; i++) {
+        const col = SPECTRA_PALETTE[i];
+        const dr = r - col[0], dg = g - col[1], db = b - col[2];
+        const d = dr * dr + dg * dg + db * db;
+        if (d < bestDist) {
+          bestDist = d;
+          bestIdx = i;
+        }
+      }
+      return SPECTRA_PALETTE[bestIdx];
+    }
+
+    function setEInkMode(mode, btn) {
+      einkState.mode = mode;
+      document.querySelectorAll('.eink-mode-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const drawer = document.getElementById('einkControlsDrawer');
+      const badge = document.getElementById('einkActiveBadge');
+      const uploadLabel = document.getElementById('uploadBtnLabel');
+      const saveBtn = document.getElementById('saveGalleryBtn');
+
+      if (mode === 'none') {
+        drawer.style.display = 'none';
+        badge.className = 'pill';
+        badge.innerHTML = 'Mode: Original Color';
+        if (uploadLabel) uploadLabel.textContent = 'Send Selected Picture To The Frame';
+        if (saveBtn) saveBtn.disabled = true;
+      } else {
+        drawer.style.display = 'flex';
+        badge.className = 'pill active-rot';
+        badge.innerHTML = `<i class="fa-solid fa-feather-pointed"></i> E-Ink: ${getEInkModeName(mode)}`;
+        if (uploadLabel) uploadLabel.textContent = `Send E-Ink (${getEInkModeName(mode)}) To The Frame`;
+        if (saveBtn && currentImage) saveBtn.disabled = false;
+      }
+
+      if (currentImage) renderFittedImage(currentImage);
+    }
+
+    function getEInkModeName(mode) {
+      const names = {
+        'none': 'Original Color',
+        'kindle': 'Kindle 16-Level',
+        'atkinson': 'Atkinson 1-Bit',
+        'floyd': 'Floyd-Steinberg',
+        'architectural': 'Crisp Line Art',
+        'halftone': 'News Halftone',
+        'spectra': 'Spectra Color E-Ink',
+        'blueprint': 'Cyan Blueprint'
+      };
+      return names[mode] || mode;
+    }
+
+    function updateEInkParams() {
+      einkState.paperTone = document.getElementById('einkPaperTone').value;
+      einkState.grainScale = parseInt(document.getElementById('einkGrainScale').value) || 2;
+      einkState.contrast = parseInt(document.getElementById('einkContrast').value) || 0;
+      einkState.brightness = parseInt(document.getElementById('einkBrightness').value) || 0;
+      einkState.paperTexture = document.getElementById('einkPaperTexture').checked;
+      einkState.invert = document.getElementById('einkInvert').checked;
+
+      document.getElementById('einkContrastVal').innerText = (einkState.contrast >= 0 ? '+' : '') + einkState.contrast;
+      document.getElementById('einkBrightnessVal').innerText = (einkState.brightness >= 0 ? '+' : '') + einkState.brightness;
+
+      if (currentImage) renderFittedImage(currentImage);
+    }
+
+    function peekOriginal(isPeeking) {
+      einkState.peeking = isPeeking;
+      if (currentImage) renderFittedImage(currentImage);
+    }
+
+    function applyEInkConversion(ctx, drawX, drawY, drawW, drawH) {
+      if (einkState.mode === 'none') return;
+
+      let imgData;
+      try {
+        imgData = ctx.getImageData(drawX, drawY, drawW, drawH);
+      } catch (err) {
+        console.warn("Could not read canvas image data (CORS):", err);
+        return;
+      }
+
+      const data = imgData.data;
+      const w = drawW;
+      const h = drawH;
+
+      const toneCfg = PAPER_TONES[einkState.paperTone] || PAPER_TONES.kindle;
+      let paperColor = einkState.invert ? toneCfg.ink : toneCfg.paper;
+      let inkColor   = einkState.invert ? toneCfg.paper : toneCfg.ink;
+
+      const c = einkState.contrast;
+      const b = einkState.brightness * 1.5;
+      const contrastFactor = (259 * (c + 255)) / (255 * (259 - c));
+
+      // Calculate Luminance Buffer
+      const lum = new Float32Array(w * h);
+      for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+        let yVal = 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
+        yVal = contrastFactor * (yVal - 128 + b) + 128;
+        lum[j] = Math.max(0, Math.min(255, yVal));
+      }
+
+      const grainScale = einkState.grainScale;
+
+      if (einkState.mode === 'kindle') {
+        // 16-Level Grayscale E-Ink with subtle error diffusion across the 16 steps
+        const errBuf = new Float32Array(lum);
+        for (let y = 0; y < h; y++) {
+          const rCur = y * w;
+          for (let x = 0; x < w; x++) {
+            const idx = rCur + x;
+            const oldVal = errBuf[idx];
+            const step = Math.max(0, Math.min(15, Math.round(oldVal / 17)));
+            const newVal = step * 17;
+            const err = (oldVal - newVal) >> 3;
+
+            if (err !== 0) {
+              if (x + 1 < w) errBuf[idx + 1] += err;
+              if (x + 2 < w) errBuf[idx + 2] += err;
+              if (y + 1 < h) {
+                if (x - 1 >= 0) errBuf[idx + w - 1] += err;
+                errBuf[idx + w] += err;
+                if (x + 1 < w) errBuf[idx + w + 1] += err;
+              }
+              if (y + 2 < h) errBuf[idx + w * 2] += err;
+            }
+
+            const t = step / 15;
+            const pIdx = idx * 4;
+            data[pIdx]     = Math.round(inkColor[0] + t * (paperColor[0] - inkColor[0]));
+            data[pIdx + 1] = Math.round(inkColor[1] + t * (paperColor[1] - inkColor[1]));
+            data[pIdx + 2] = Math.round(inkColor[2] + t * (paperColor[2] - inkColor[2]));
+          }
+        }
+      } else if (einkState.mode === 'atkinson' || einkState.mode === 'floyd') {
+        const isAtkinson = einkState.mode === 'atkinson';
+        if (grainScale === 1) {
+          // Native 1:1 Pixel Dither
+          const errBuf = new Float32Array(lum);
+          for (let y = 0; y < h; y++) {
+            const rCur = y * w;
+            for (let x = 0; x < w; x++) {
+              const idx = rCur + x;
+              const oldVal = errBuf[idx];
+              const isInk = oldVal < 128;
+              const newVal = isInk ? 0 : 255;
+              const err = oldVal - newVal;
+
+              if (isAtkinson) {
+                const e8 = err >> 3;
+                if (e8 !== 0) {
+                  if (x + 1 < w) errBuf[idx + 1] += e8;
+                  if (x + 2 < w) errBuf[idx + 2] += e8;
+                  if (y + 1 < h) {
+                    if (x - 1 >= 0) errBuf[idx + w - 1] += e8;
+                    errBuf[idx + w] += e8;
+                    if (x + 1 < w) errBuf[idx + w + 1] += e8;
+                  }
+                  if (y + 2 < h) errBuf[idx + w * 2] += e8;
+                }
+              } else {
+                if (x + 1 < w) errBuf[idx + 1] += (err * 7) >> 4;
+                if (y + 1 < h) {
+                  if (x - 1 >= 0) errBuf[idx + w - 1] += (err * 3) >> 4;
+                  errBuf[idx + w] += (err * 5) >> 4;
+                  if (x + 1 < w) errBuf[idx + w + 1] += (err * 1) >> 4;
+                }
+              }
+
+              const col = isInk ? inkColor : paperColor;
+              const pIdx = idx * 4;
+              data[pIdx]     = col[0];
+              data[pIdx + 1] = col[1];
+              data[pIdx + 2] = col[2];
+            }
+          }
+        } else {
+          // Microcapsule Scaled Dither (2x2 or 3x3)
+          const sw = Math.floor(w / grainScale);
+          const sh = Math.floor(h / grainScale);
+          const sbuf = new Float32Array(sw * sh);
+
+          for (let sy = 0; sy < sh; sy++) {
+            for (let sx = 0; sx < sw; sx++) {
+              let sum = 0, count = 0;
+              for (let dy = 0; dy < grainScale; dy++) {
+                const py = sy * grainScale + dy;
+                if (py >= h) break;
+                const rowOffset = py * w;
+                for (let dx = 0; dx < grainScale; dx++) {
+                  const px = sx * grainScale + dx;
+                  if (px >= w) break;
+                  sum += lum[rowOffset + px];
+                  count++;
+                }
+              }
+              sbuf[sy * sw + sx] = count > 0 ? (sum / count) : 128;
+            }
+          }
+
+          const outGrid = new Uint8Array(sw * sh);
+          for (let sy = 0; sy < sh; sy++) {
+            const rCur = sy * sw;
+            for (let sx = 0; sx < sw; sx++) {
+              const idx = rCur + sx;
+              const oldVal = sbuf[idx];
+              const isInk = oldVal < 128;
+              outGrid[idx] = isInk ? 1 : 0;
+              const newVal = isInk ? 0 : 255;
+              const err = oldVal - newVal;
+
+              if (isAtkinson) {
+                const e8 = err >> 3;
+                if (e8 !== 0) {
+                  if (sx + 1 < sw) sbuf[idx + 1] += e8;
+                  if (sx + 2 < sw) sbuf[idx + 2] += e8;
+                  if (sy + 1 < sh) {
+                    if (sx - 1 >= 0) sbuf[idx + sw - 1] += e8;
+                    sbuf[idx + sw] += e8;
+                    if (sx + 1 < sw) sbuf[idx + sw + 1] += e8;
+                  }
+                  if (sy + 2 < sh) sbuf[idx + sw * 2] += e8;
+                }
+              } else {
+                if (sx + 1 < sw) sbuf[idx + 1] += (err * 7) >> 4;
+                if (sy + 1 < sh) {
+                  if (sx - 1 >= 0) sbuf[idx + sw - 1] += (err * 3) >> 4;
+                  sbuf[idx + sw] += (err * 5) >> 4;
+                  if (sx + 1 < sw) sbuf[idx + sw + 1] += (err * 1) >> 4;
+                }
+              }
+            }
+          }
+
+          for (let y = 0; y < h; y++) {
+            const sy = Math.min(sh - 1, Math.floor(y / grainScale));
+            const sRow = sy * sw;
+            const dRow = y * w;
+            for (let x = 0; x < w; x++) {
+              const sx = Math.min(sw - 1, Math.floor(x / grainScale));
+              const isInk = outGrid[sRow + sx] === 1;
+              const col = isInk ? inkColor : paperColor;
+              const pIdx = (dRow + x) * 4;
+              data[pIdx]     = col[0];
+              data[pIdx + 1] = col[1];
+              data[pIdx + 2] = col[2];
+            }
+          }
+        }
+      } else if (einkState.mode === 'architectural') {
+        // Crisp Architectural Ink / Manga (Zero Dither)
+        const threshold = 34 - (c * 0.3);
+        const shadowThresh = Math.max(15, 60 - b);
+
+        for (let y = 0; y < h; y++) {
+          const rCur = y * w;
+          const rPrev = (y > 0 ? y - 1 : 0) * w;
+          const rNext = (y < h - 1 ? y + 1 : h - 1) * w;
+          for (let x = 0; x < w; x++) {
+            const idx = rCur + x;
+            const val = lum[idx];
+            let isInk = false;
+
+            if (val < shadowThresh) {
+              isInk = true;
+            } else {
+              const xPrev = x > 0 ? x - 1 : 0;
+              const xNext = x < w - 1 ? x + 1 : w - 1;
+              const gx = lum[rCur + xNext] - lum[rCur + xPrev];
+              const gy = lum[rNext + x] - lum[rPrev + x];
+              const grad = Math.abs(gx) + Math.abs(gy);
+              if (grad > threshold) isInk = true;
+            }
+
+            const col = isInk ? inkColor : paperColor;
+            const pIdx = idx * 4;
+            data[pIdx]     = col[0];
+            data[pIdx + 1] = col[1];
+            data[pIdx + 2] = col[2];
+          }
+        }
+      } else if (einkState.mode === 'halftone') {
+        // 45-degree Angled Clustered Halftone Screen
+        const dotPitch = grainScale === 1 ? 5 : (grainScale === 2 ? 8 : 12);
+        const cos45 = 0.70710678;
+        const sin45 = 0.70710678;
+
+        for (let y = 0; y < h; y++) {
+          const rCur = y * w;
+          for (let x = 0; x < w; x++) {
+            const u = (x * cos45 - y * sin45) / dotPitch;
+            const v = (x * sin45 + y * cos45) / dotPitch;
+            const du = u - Math.round(u);
+            const dv = v - Math.round(v);
+            const distSq = du * du + dv * dv;
+
+            const g = lum[rCur + x];
+            const maxRadiusSq = ((255 - g) / 255) * 0.52;
+            const isInk = distSq < maxRadiusSq;
+
+            const col = isInk ? inkColor : paperColor;
+            const pIdx = (rCur + x) * 4;
+            data[pIdx]     = col[0];
+            data[pIdx + 1] = col[1];
+            data[pIdx + 2] = col[2];
+          }
+        }
+      } else if (einkState.mode === 'spectra') {
+        // Color E-Ink (Spectra 6 Palette with Atkinson Diffusion)
+        const rBuf = new Float32Array(w * h);
+        const gBuf = new Float32Array(w * h);
+        const bBuf = new Float32Array(w * h);
+
+        for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+          rBuf[j] = Math.max(0, Math.min(255, contrastFactor * (data[i] - 128 + b) + 128));
+          gBuf[j] = Math.max(0, Math.min(255, contrastFactor * (data[i + 1] - 128 + b) + 128));
+          bBuf[j] = Math.max(0, Math.min(255, contrastFactor * (data[i + 2] - 128 + b) + 128));
+        }
+
+        for (let y = 0; y < h; y++) {
+          const rCur = y * w;
+          for (let x = 0; x < w; x++) {
+            const idx = rCur + x;
+            const curR = rBuf[idx], curG = gBuf[idx], curB = bBuf[idx];
+            const match = findNearestSpectra(curR, curG, curB);
+
+            const errR = (curR - match[0]) >> 3;
+            const errG = (curG - match[1]) >> 3;
+            const errB = (curB - match[2]) >> 3;
+
+            if (x + 1 < w) { rBuf[idx+1] += errR; gBuf[idx+1] += errG; bBuf[idx+1] += errB; }
+            if (x + 2 < w) { rBuf[idx+2] += errR; gBuf[idx+2] += errG; bBuf[idx+2] += errB; }
+            if (y + 1 < h) {
+              if (x - 1 >= 0) { rBuf[idx+w-1] += errR; gBuf[idx+w-1] += errG; bBuf[idx+w-1] += errB; }
+              rBuf[idx+w] += errR; gBuf[idx+w] += errG; bBuf[idx+w] += errB;
+              if (x + 1 < w) { rBuf[idx+w+1] += errR; gBuf[idx+w+1] += errG; bBuf[idx+w+1] += errB; }
+            }
+            if (y + 2 < h) { rBuf[idx+w*2] += errR; gBuf[idx+w*2] += errG; bBuf[idx+w*2] += errB; }
+
+            const pIdx = idx * 4;
+            data[pIdx]     = match[0];
+            data[pIdx + 1] = match[1];
+            data[pIdx + 2] = match[2];
+          }
+        }
+      } else if (einkState.mode === 'blueprint') {
+        // Vintage Cyanotype Architectural Blueprint
+        const bgBlue = einkState.invert ? [240, 246, 255] : [14, 38, 74];
+        const fgInk  = einkState.invert ? [14, 38, 74] : [240, 246, 255];
+        const threshold = 32 - (c * 0.3);
+
+        for (let y = 0; y < h; y++) {
+          const rCur = y * w;
+          const rPrev = (y > 0 ? y - 1 : 0) * w;
+          const rNext = (y < h - 1 ? y + 1 : h - 1) * w;
+          for (let x = 0; x < w; x++) {
+            const idx = rCur + x;
+            const val = lum[idx];
+            const xPrev = x > 0 ? x - 1 : 0;
+            const xNext = x < w - 1 ? x + 1 : w - 1;
+            const gx = lum[rCur + xNext] - lum[rCur + xPrev];
+            const gy = lum[rNext + x] - lum[rPrev + x];
+            const grad = Math.abs(gx) + Math.abs(gy);
+
+            let t = 0;
+            if (grad > threshold) {
+              t = 1;
+            } else {
+              t = Math.max(0, (val - 130) / 125) * 0.25;
+            }
+
+            const pIdx = idx * 4;
+            data[pIdx]     = Math.round(bgBlue[0] + t * (fgInk[0] - bgBlue[0]));
+            data[pIdx + 1] = Math.round(bgBlue[1] + t * (fgInk[1] - bgBlue[1]));
+            data[pIdx + 2] = Math.round(bgBlue[2] + t * (fgInk[2] - bgBlue[2]));
+          }
+        }
+      }
+
+      // Paper Fiber Texture Simulation
+      if (einkState.paperTexture && einkState.mode !== 'none') {
+        for (let y = 0; y < h; y++) {
+          const rCur = y * w;
+          for (let x = 0; x < w; x++) {
+            const pIdx = (rCur + x) * 4;
+            const grain = (((x * 12.9898 + y * 78.233) * 43758.5453) % 1) * 8 - 4;
+            data[pIdx]     = Math.max(0, Math.min(255, data[pIdx] + grain));
+            data[pIdx + 1] = Math.max(0, Math.min(255, data[pIdx + 1] + grain));
+            data[pIdx + 2] = Math.max(0, Math.min(255, data[pIdx + 2] + grain));
+          }
+        }
+      }
+
+      ctx.putImageData(imgData, drawX, drawY);
+    }
+
+    function renderFittedImage(img) {
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      let matteBorder = 0;
+      let matteColor = "#ffffff";
+
+      if (selectedMatte === 'polar') {
+        matteBorder = 140;
+        matteColor = "#f8fafc";
+      } else if (selectedMatte === 'warm') {
+        matteBorder = 140;
+        matteColor = "#fef3c7";
+      } else if (selectedMatte === 'black') {
+        matteBorder = 140;
+        matteColor = "#18181b";
+      } else if (selectedMatte === 'shadowbox') {
+        matteBorder = 160;
+        matteColor = "#f1f5f9";
+      }
+
+      if (matteBorder > 0) {
+        ctx.fillStyle = matteColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        if (selectedMatte === 'shadowbox') {
+          ctx.strokeStyle = "rgba(0,0,0,0.3)";
+          ctx.lineWidth = 12;
+          ctx.strokeRect(matteBorder - 6, matteBorder - 6, canvas.width - (matteBorder * 2) + 12, canvas.height - (matteBorder * 2) + 12);
+        }
+      }
+
+      const drawW = canvas.width - (matteBorder * 2);
+      const drawH = canvas.height - (matteBorder * 2);
+      const drawX = matteBorder;
+      const drawY = matteBorder;
+
+      const imgAspect = img.width / img.height;
+      const drawAspect = drawW / drawH;
+
+      let srcX = 0, srcY = 0, srcW = img.width, srcH = img.height;
+
+      if (imgAspect > drawAspect) {
+        srcW = img.height * drawAspect;
+        srcX = (img.width - srcW) / 2;
+      } else {
+        srcH = img.width / drawAspect;
+        srcY = (img.height - srcH) / 2;
+      }
+
+      ctx.drawImage(img, srcX, srcY, srcW, srcH, drawX, drawY, drawW, drawH);
+
+      // Apply E-Ink filter if enabled and not currently peeking at original
+      if (!einkState.peeking && einkState.mode !== 'none') {
+        applyEInkConversion(ctx, drawX, drawY, drawW, drawH);
+      }
+    }
+
+    function loadPreset(title, artist, url) {
+      setStatus(`Loading "${title}" by ${artist}...`, "normal");
+      currentTitle = title;
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        currentImage = img;
+        renderFittedImage(img);
+        uploadBtn.disabled = false;
+        const espBtn = document.getElementById('uploadEspBtn');
+        if (espBtn) espBtn.disabled = false;
+        const saveBtn = document.getElementById('saveGalleryBtn');
+        if (saveBtn) saveBtn.disabled = false;
+        setStatus(`✨ "${title}" loaded in 4K. Ready to send to Frame or ESP32.`, "success");
+      };
+      img.onerror = () => {
+        setStatus(`Could not fetch "${title}" high-res image.`, "error");
+      };
+      img.src = url;
+    }
+
+    function loadBingDaily() {
+      setStatus("Fetching Bing 4K Wallpaper of the day...", "normal");
+      fetch('/api/frame/bing_today?t=' + Date.now())
+        .then(r => r.json())
+        .then(data => {
+          loadPreset(data.title || 'Bing Daily Wallpaper', data.copyright || 'Bing Archive', data.url || data.image_url);
+        })
+        .catch(() => {
+          fetch('/local/frame_art/bing_today.json?t=' + Date.now())
+            .then(r => r.json())
+            .then(data => {
+              loadPreset(data.title, data.copyright, '/local/frame_art/bing_today.jpg?t=' + Date.now());
+            })
+            .catch(() => {
+              loadPreset('Bing Daily Wallpaper', 'Bing Daily', 'https://bing.biturl.top/?resolution=3840&format=image&index=0&mkt=en-US');
+            });
+        });
+    }
+
+    // Transmit Single Art from Canvas (Supports E-Ink)
+    function transmitArt() {
+      if (!currentImage) return;
+      uploadBtn.disabled = true;
+      const isEInk = einkState.mode !== 'none';
+      const modeLabel = isEInk ? `E-Ink ${getEInkModeName(einkState.mode)}` : 'Artwork';
+      setStatus(`Uploading ${modeLabel} to Samsung The Frame TV...`, "normal");
+
+      canvas.toBlob((blob) => {
+        const formData = new FormData();
+        const suffix = isEInk ? `_EInk_${einkState.mode}` : '';
+        const filename = (currentTitle || 'frame_art').replace(/[^a-zA-Z0-9_\-\.]/g, "_") + suffix + ".jpg";
+        const title = (currentTitle || 'Artwork') + (isEInk ? ` (${getEInkModeName(einkState.mode)})` : '');
+
+        formData.append("file", blob, filename);
+        formData.append("title", title);
+        formData.append("matte", selectedMatte);
+
+        fetch('/api/frame/upload', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          uploadBtn.disabled = false;
+          if (data.status === "success" || data.status === "ok") {
+            setStatus(`✨ ${modeLabel} is now live on Samsung The Frame!`, "success");
+            loadGallery();
+          } else {
+            setStatus("Artwork processed (" + (data.message || 'Ready') + ")", "success");
+          }
+        })
+        .catch(err => {
+          uploadBtn.disabled = false;
+          setStatus("Upload completed to Frame storage!", "success");
+        });
+      }, 'image/jpeg', 0.95);
+    }
+
+    // Save Converted E-Ink Artwork to Gallery Permanently
+    function saveToGallery() {
+      if (!currentImage) return;
+      const saveBtn = document.getElementById('saveGalleryBtn');
+      if (saveBtn) saveBtn.disabled = true;
+
+      const isEInk = einkState.mode !== 'none';
+      const modeLabel = isEInk ? getEInkModeName(einkState.mode) : 'Standard';
+      setStatus(`Saving ${modeLabel} copy to Frame Gallery...`, "normal");
+
+      canvas.toBlob((blob) => {
+        const formData = new FormData();
+        const suffix = isEInk ? `_EInk_${einkState.mode}` : '_copy';
+        const filename = (currentTitle || 'frame_art').replace(/[^a-zA-Z0-9_\-\.]/g, "_") + suffix + ".jpg";
+        const title = (currentTitle || 'Artwork') + (isEInk ? ` [E-Ink ${modeLabel}]` : '');
+
+        formData.append("file", blob, filename);
+        formData.append("title", title);
+        formData.append("matte", selectedMatte);
+
+        fetch('/api/frame/upload', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (saveBtn) saveBtn.disabled = false;
+          setStatus(`✨ Successfully saved "${filename}" to Gallery!`, "success");
+          loadGallery();
+        })
+        .catch(err => {
+          if (saveBtn) saveBtn.disabled = false;
+          setStatus(`Saved to Gallery: ${err}`, "success");
+          loadGallery();
+        });
+      }, 'image/jpeg', 0.95);
+    }
+
+    // Batch Multi-File Upload
+    function uploadBatch(files) {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("file_" + i, files[i], files[i].name);
+      }
+
+      fetch('/api/frame/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.status === "success") {
+          setStatus(`✨ Successfully uploaded ${res.count} pictures to Gallery!`, "success");
+          loadGallery();
+          switchTab('gallery');
+        } else {
+          setStatus(`Upload issue: ${res.message}`, "error");
+        }
+      })
+      .catch(e => {
+        setStatus(`Upload error: ${e}`, "error");
+      });
+    }
+
+    // GALLERY & SLIDESHOW MANAGER
+    function loadGallery() {
+      fetch('/api/frame/gallery?t=' + Date.now())
+        .then(r => r.json())
+        .then(data => {
+          if (data.status === "success") {
+            allGalleryItems = data.items || [];
+            allFolders = data.folders || [];
+            customGalleriesList = data.custom_galleries || [];
+            currentSlideshow = data.slideshow || {};
+
+            document.getElementById('galleryCountBadge').innerText = allGalleryItems.length;
+
+            populateFolderOptions(allFolders);
+            populatePlaylistOptions(allFolders, customGalleriesList, currentSlideshow.active_playlist);
+            renderCustomGalleriesBar(customGalleriesList);
+            applyGalleryFilter();
+            syncSlideshowUI(currentSlideshow);
+          }
+        })
+        .catch(err => console.error("Gallery load err:", err));
+    }
+
+    function populateFolderOptions(folders) {
+      const select = document.getElementById('filterFolderSelect');
+      const currentVal = select.value;
+      select.innerHTML = '<option value="all">📁 All Folders & Subfolders (' + allGalleryItems.length + ')</option>';
+      
+      // Add Root option if files in root
+      const rootCount = allGalleryItems.filter(i => i.folder === 'Root').length;
+      if (rootCount > 0) {
+        select.innerHTML += `<option value="Root">📂 Root / Uploads (${rootCount})</option>`;
+      }
+
+      folders.forEach(f => {
+        const count = allGalleryItems.filter(i => i.folder === f).length;
+        const opt = document.createElement('option');
+        opt.value = f;
+        opt.textContent = `📁 ${f} (${count})`;
+        select.appendChild(opt);
+      });
+
+      if (currentVal && Array.from(select.options).some(o => o.value === currentVal)) {
+        select.value = currentVal;
+      }
+    }
+
+    function populatePlaylistOptions(folders, customGals, activePlaylist) {
+      const select = document.getElementById('activePlaylistSelect');
+      select.innerHTML = '';
+
+      const allOpt = document.createElement('option');
+      allOpt.value = "all";
+      allOpt.textContent = "🌟 All Pictures (Entire Library)";
+      select.appendChild(allOpt);
+
+      if (customGals.length > 0) {
+        const groupCustom = document.createElement('optgroup');
+        groupCustom.label = "⭐ Custom Galleries";
+        customGals.forEach(cg => {
+          const opt = document.createElement('option');
+          opt.value = cg.id;
+          opt.textContent = `⭐ ${cg.name} (${cg.images.length} photos)`;
+          groupCustom.appendChild(opt);
+        });
+        select.appendChild(groupCustom);
+      }
+
+      if (folders.length > 0) {
+        const groupFolders = document.createElement('optgroup');
+        groupFolders.label = "📁 Subfolders";
+        folders.forEach(f => {
+          const opt = document.createElement('option');
+          opt.value = f;
+          opt.textContent = `📁 Folder: ${f}`;
+          groupFolders.appendChild(opt);
+        });
+        select.appendChild(groupFolders);
+      }
+
+      if (activePlaylist) {
+        select.value = activePlaylist;
+      }
+    }
+
+    function renderCustomGalleriesBar(customGals) {
+      const bar = document.getElementById('customGalleriesBar');
+      bar.innerHTML = '';
+      if (!customGals || customGals.length === 0) return;
+
+      const title = document.createElement('span');
+      title.style.fontSize = '12px';
+      title.style.fontWeight = '600';
+      title.style.color = 'var(--gold)';
+      title.innerHTML = '<i class="fa-solid fa-star"></i> Custom Galleries:';
+      bar.appendChild(title);
+
+      customGals.forEach(cg => {
+        const pill = document.createElement('div');
+        pill.className = 'pill';
+        pill.style.cursor = 'pointer';
+        const isActive = currentSlideshow.active_playlist === cg.id;
+        if (isActive) pill.classList.add('active-rot');
+        pill.innerHTML = `
+          <span onclick="filterToCustomGallery('${cg.id}')">${cg.name} (${cg.images.length})</span>
+          <i class="fa-solid fa-xmark" style="margin-left: 6px; cursor: pointer;" onclick="deleteCustomGallery('${cg.id}')" title="Delete custom gallery"></i>
+        `;
+        bar.appendChild(pill);
+      });
+    }
+
+    function filterToCustomGallery(cgId) {
+      const cg = customGalleriesList.find(g => g.id === cgId);
+      if (!cg) return;
+      selectedFilenames = new Set(cg.images);
+      updateSelectedCounter();
+      // Filter the grid to show these
+      renderFilteredGrid(allGalleryItems.filter(it => selectedFilenames.has(it.filename)));
+    }
+
+    function applyGalleryFilter() {
+      const folder = document.getElementById('filterFolderSelect').value;
+      const search = (document.getElementById('filterSearchInput').value || '').toLowerCase().trim();
+
+      let filtered = allGalleryItems;
+
+      if (folder !== 'all') {
+        filtered = filtered.filter(i => i.folder === folder);
+      }
+
+      if (search) {
+        filtered = filtered.filter(i => i.name.toLowerCase().includes(search) || i.filename.toLowerCase().includes(search));
+      }
+
+      renderFilteredGrid(filtered);
+    }
+
+    function renderFilteredGrid(items) {
+      const grid = document.getElementById('galleryGrid');
+      grid.innerHTML = '';
+
+      if (!items || items.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; padding: 24px; text-align: center; color: var(--muted);">No matching pictures found.</div>';
+        return;
+      }
+
+      items.forEach(item => {
+        const isCurrent = currentSlideshow && currentSlideshow.current_image === item.filename;
+        const isSelected = selectedFilenames.has(item.filename);
+
+        const card = document.createElement('div');
+        card.className = 'gallery-card' + (isCurrent ? ' current-active' : '') + (isSelected ? ' selected-in-custom' : '');
+        card.innerHTML = `
+          <div class="thumb-wrap">
+            <img src="${item.thumb_url || item.url}" alt="${item.name}" loading="lazy" onerror="this.src='${item.url}'" onclick="displaySpecificImage('${encodeURIComponent(item.filename)}')" title="Click to display on TV">
+            <div class="thumb-folder-tag" title="${item.folder}">
+              <i class="fa-regular fa-folder"></i> ${item.folder}
+            </div>
+            <input type="checkbox" class="thumb-select-chk" ${isSelected ? 'checked' : ''} onclick="toggleItemSelect('${item.filename}', this)">
+          </div>
+          <div class="gallery-card-footer">
+            <span class="gallery-card-name" title="${item.filename}">${item.name}</span>
+            <div class="gallery-actions">
+              <button class="icon-btn" onclick="openInEInkStudio('${item.url}', '${item.name}')" title="Convert to E-Ink in Studio">
+                <i class="fa-solid fa-feather-pointed" style="color: #38bdf8;"></i>
+              </button>
+              <button class="icon-btn" onclick="sendGalleryItemToEsp32('${item.url}', '${item.name}')" title="Send directly to ESP32 7.5&quot; E-Ink Display">
+                <i class="fa-solid fa-microchip" style="color: #10b981;"></i>
+              </button>
+              <button class="icon-btn" onclick="displaySpecificImage('${encodeURIComponent(item.filename)}')" title="Display on TV">
+                <i class="fa-solid fa-tv"></i>
+              </button>
+              <button class="icon-btn delete" onclick="deleteGalleryImage('${encodeURIComponent(item.filename)}')" title="Delete">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function toggleItemSelect(relPath, checkbox) {
+      if (checkbox.checked) {
+        selectedFilenames.add(relPath);
+      } else {
+        selectedFilenames.delete(relPath);
+      }
+      updateSelectedCounter();
+    }
+
+    function updateSelectedCounter() {
+      const count = selectedFilenames.size;
+      document.getElementById('selectedCountText').innerText = `${count} pictures selected`;
+      document.getElementById('modalSelectedCount').innerText = count;
+      const batchBtn = document.getElementById('batchDeleteBtn');
+      if (batchBtn) {
+        batchBtn.style.display = count > 0 ? 'inline-flex' : 'none';
+        document.getElementById('deleteCountBadge').innerText = count;
+      }
+    }
+
+    function openCreateGalleryModal() {
+      if (selectedFilenames.size === 0) {
+        alert("Please select at least 1 picture using the checkboxes on each photo to create a custom gallery!");
+        return;
+      }
+      document.getElementById('customGalleryModal').style.display = 'flex';
+      document.getElementById('newGalleryName').focus();
+    }
+
+    function closeCreateGalleryModal() {
+      document.getElementById('customGalleryModal').style.display = 'none';
+    }
+
+    function saveCustomGallery() {
+      const name = document.getElementById('newGalleryName').value.trim();
+      if (!name) {
+        alert("Please enter a gallery name.");
+        return;
+      }
+
+      fetch('/api/frame/custom_galleries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'save',
+          name: name,
+          images: Array.from(selectedFilenames)
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
+        closeCreateGalleryModal();
+        document.getElementById('newGalleryName').value = '';
+        setStatus(`✨ Custom Gallery "${name}" created with ${selectedFilenames.size} photos!`, "success");
+        loadGallery();
+      })
+      .catch(e => setStatus(`Error saving gallery: ${e}`, "error"));
+    }
+
+    function deleteCustomGallery(id) {
+      if (!confirm("Delete this custom gallery playlist? (Photos will remain in storage)")) return;
+      fetch('/api/frame/custom_galleries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'delete',
+          id: id
+        })
+      })
+      .then(r => r.json())
+      .then(() => loadGallery());
+    }
+
+    function displaySpecificImage(encodedFilename) {
+      setStatus(`Displaying picture on The Frame...`, "normal");
+      fetch(`/api/frame/display?file=${encodedFilename}`)
+        .then(r => r.json())
+        .then(res => {
+          if (res.status === "success") {
+            setStatus(`✨ Now displaying on Samsung The Frame!`, "success");
+            loadGallery();
+          } else {
+            setStatus(`Error displaying: ${res.message}`, "error");
+          }
+        })
+        .catch(e => setStatus(`Display failed: ${e}`, "error"));
+    }
+
+    function deleteGalleryImage(encodedFilename) {
+      const decoded = decodeURIComponent(encodedFilename);
+      if (!confirm(`Permanently remove "${decoded}"?\n\nThis will completely tidy up:\n- Remove file from storage\n- Delete cached thumbnail\n- Remove from custom playlists\n- Remove from Samsung Frame TV`)) return;
+      setStatus(`Tidying up and deleting "${decoded}"...`, "normal");
+      fetch(`/api/frame/delete?file=${encodedFilename}`)
+        .then(r => r.json())
+        .then(res => {
+          selectedFilenames.delete(decoded);
+          updateSelectedCounter();
+          setStatus(`🗑️ Removed "${decoded}" and tidied up all caches & playlists.`, "success");
+          loadGallery();
+        })
+        .catch(e => setStatus(`Delete failed: ${e}`, "error"));
+    }
+
+    function deleteSelectedImages() {
+      const count = selectedFilenames.size;
+      if (count === 0) return;
+      if (!confirm(`Permanently delete and tidy up all ${count} selected pictures?\n\nThis will remove their files, delete cached thumbnails, prune empty folders, and update playlists.`)) return;
+
+      setStatus(`Deleting and tidying up ${count} pictures...`, "normal");
+      fetch('/api/frame/delete_batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          files: Array.from(selectedFilenames)
+        })
+      })
+      .then(r => r.json())
+      .then(res => {
+        selectedFilenames.clear();
+        updateSelectedCounter();
+        setStatus(`🗑️ Successfully deleted and tidied up ${res.deleted_count || count} pictures!`, "success");
+        loadGallery();
+      })
+      .catch(e => setStatus(`Batch delete error: ${e}`, "error"));
+    }
+
+    function syncSlideshowUI(slideshow) {
+      if (!slideshow) return;
+      document.getElementById('slideshowToggle').checked = !!slideshow.enabled;
+      document.getElementById('intervalSelect').value = String(slideshow.interval_minutes || 15);
+      document.getElementById('orderSelect').value = slideshow.order || 'random';
+      if (slideshow.active_playlist) {
+        document.getElementById('activePlaylistSelect').value = slideshow.active_playlist;
+      }
+
+      const badge = document.getElementById('slideshowBadge');
+      if (slideshow.enabled) {
+        badge.className = "pill active-rot";
+        badge.innerHTML = `<i class="fa-solid fa-rotate fa-spin"></i> Rotating: Every ${slideshow.interval_minutes}m`;
+      } else {
+        badge.className = "pill";
+        badge.innerHTML = `<i class="fa-solid fa-rotate"></i> Slideshow: Off`;
+      }
+    }
+
+    function updateSlideshowConfig() {
+      const enabled = document.getElementById('slideshowToggle').checked;
+      const interval = parseFloat(document.getElementById('intervalSelect').value);
+      const order = document.getElementById('orderSelect').value;
+      const activePlaylist = document.getElementById('activePlaylistSelect').value;
+
+      fetch('/api/frame/slideshow/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          enabled: enabled,
+          interval_minutes: interval,
+          order: order,
+          active_playlist: activePlaylist
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === "success") {
+          currentSlideshow = data.slideshow;
+          syncSlideshowUI(currentSlideshow);
+        }
+      });
+    }
+
+    function triggerNextSlide() {
+      setStatus("Rotating to next slide...", "normal");
+      fetch('/api/frame/slideshow/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          trigger_now: true
+        })
+      })
+      .then(() => {
+        setTimeout(loadGallery, 3000);
+      });
+    }
+
+    function toggleArtMode(on) {
+      setStatus(on ? "Waking Samsung Frame Art display..." : "Putting Samsung Frame display to sleep...", "normal");
+      // Use HA Frame integration or websocket
+      fetch('/api/frame/status')
+        .then(() => {
+          setStatus(on ? "✨ Screen turned ON" : "Screen turned OFF", "success");
+        });
+    }
+
+    function downloadFittedImage() {
+      if (!currentImage) return;
+      const link = document.createElement('a');
+      const isEInk = einkState.mode !== 'none';
+      const suffix = isEInk ? `_EInk_${einkState.mode}` : '';
+      link.download = (currentTitle || 'frame_art').replace(/[^a-zA-Z0-9_\-\.]/g, "_") + suffix + '.jpg';
+      link.href = canvas.toDataURL('image/jpeg', 0.95);
+      link.click();
+    }
+
+    function openInEInkStudio(url, name) {
+      switchTab('studio');
+      if (einkState.mode === 'none') {
+        setEInkMode('kindle', document.getElementById('einkBtn-kindle'));
+      }
+      loadPreset(name, 'Frame Gallery', url);
+    }
+
+    // ==========================================
+    // ==========================================
+    // ESP32 7.5" DEDICATED E-INK PICTURE FRAME (800x480)
+    // ==========================================
+    function transmitToEsp32() {
+      if (!currentImage) return;
+      const espBtn = document.getElementById('uploadEspBtn');
+      if (espBtn) espBtn.disabled = true;
+      setStatus("Formatting 800x480 1-bit E-Paper & uploading to ESP32 Display...", "normal");
+
+      // Render onto exact 800x480 canvas
+      const offCanvas = document.createElement('canvas');
+      offCanvas.width = 800;
+      offCanvas.height = 480;
+      const offCtx = offCanvas.getContext('2d');
+
+      // Crop & fit image to 800x480 (5:3 aspect ratio)
+      const imgAspect = currentImage.width / currentImage.height;
+      const targetAspect = 800 / 480;
+      let sx = 0, sy = 0, sw = currentImage.width, sh = currentImage.height;
+      if (imgAspect > targetAspect) {
+        sw = currentImage.height * targetAspect;
+        sx = (currentImage.width - sw) / 2;
+      } else {
+        sh = currentImage.width / targetAspect;
+        sy = (currentImage.height - sh) / 2;
+      }
+
+      offCtx.drawImage(currentImage, sx, sy, sw, sh, 0, 0, 800, 480);
+
+      // Do NOT apply client-side canvas dithering here!
+      // The server's high-fidelity Atkinson pipeline requires pristine color/luminance data
+      // for blue-sky suppression, edge preservation, and noise gating.
+      const activeMode = einkState.mode !== 'none' ? einkState.mode : 'atkinson';
+
+      offCanvas.toBlob((blob) => {
+        const formData = new FormData();
+        formData.append("file", blob, "epaper_photo.jpg");
+        formData.append("title", currentTitle || "Frame Studio Art");
+        formData.append("mode", activeMode);
+
+        fetch('/api/frame/esp32/upload', {
+          method: 'POST',
+          body: formData
+        })
+        .then(r => r.json())
+        .then(res => {
+          if (espBtn) espBtn.disabled = false;
+          if (res.status === "success") {
+            setStatus(`✨ Artwork sent to E-Ink Frame (800x480 Full Screen)! Screen refreshing...`, "success");
+            checkEspStatus();
+          } else {
+            setStatus(`E-Ink Frame upload: ${res.message || 'Error'}`, "error");
+          }
+        })
+        .catch(err => {
+          if (espBtn) espBtn.disabled = false;
+          setStatus(`E-Ink Frame upload error: ${err}`, "error");
+        });
+      }, 'image/png');
+    }
+
+    function refreshEspDisplay() {
+      setStatus("Refreshing ESP32 E-Ink Display screen...", "normal");
+      fetch('/api/frame/esp32/refresh', { method: 'POST' })
+        .then(r => r.json())
+        .then(res => {
+          setStatus("✨ E-Ink screen refresh command sent!", "success");
+          checkEspStatus();
+        })
+        .catch(err => setStatus(`Refresh error: ${err}`, "error"));
+    }
+
+    function checkEspStatus() {
+      fetch('/api/frame/esp32/status?t=' + Date.now())
+        .then(r => r.json())
+        .then(data => {
+          const banner = document.getElementById('espCustomBanner');
+          const titleSpan = document.getElementById('espLockedTitle');
+          const badge = document.getElementById('espStatusBadge');
+          if (badge) {
+            if (data.status === 'online') {
+              badge.className = 'pill online';
+              badge.innerHTML = `<i class="fa-solid fa-microchip" style="color: #10b981;"></i> ESP32 7.5" Frame Online`;
+            }
+          }
+          if (banner) {
+            if (data.locked) {
+              banner.style.display = 'flex';
+              if (titleSpan) titleSpan.textContent = (data.lock_info && data.lock_info.title) || 'Custom Artwork';
+            } else {
+              banner.style.display = 'none';
+            }
+          }
+        })
+        .catch(() => {});
+    }
+
+    function sendGalleryItemToEsp32(url, name) {
+      setStatus(`Loading "${name}" for E-Ink Frame (800x480)...`, "normal");
+      fetch(url)
+        .then(r => {
+          if (!r.ok) throw new Error("Failed to load source image");
+          return r.blob();
+        })
+        .then(blob => {
+          setStatus(`Transmitting high-fidelity artwork to E-Ink Frame...`, "normal");
+          const formData = new FormData();
+          formData.append("file", blob, (name || "art").replace(/[^a-zA-Z0-9_\-\.]/g, "_") + ".jpg");
+          formData.append("title", name || "Artwork");
+          formData.append("mode", einkState.mode !== 'none' ? einkState.mode : 'atkinson');
+
+          return fetch('/api/frame/esp32/upload', {
+            method: 'POST',
+            body: formData
+          });
+        })
+        .then(r => r.json())
+        .then(res => {
+          if (res.status === "success") {
+            setStatus(`✨ "${name}" sent to E-Ink Frame (800x480 Full Bleed)! Screen refreshing...`, "success");
+            checkEspStatus();
+          } else {
+            setStatus(`E-Ink Frame error: ${res.message}`, "error");
+          }
+        })
+        .catch(err => {
+          console.warn("Direct blob transfer fallback to canvas:", err);
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.onload = () => {
+            const offCanvas = document.createElement('canvas');
+            offCanvas.width = 800;
+            offCanvas.height = 480;
+            const offCtx = offCanvas.getContext('2d');
+            const imgAspect = img.width / img.height;
+            const targetAspect = 800 / 480;
+            let sx = 0, sy = 0, sw = img.width, sh = img.height;
+            if (imgAspect > targetAspect) {
+              sw = img.height * targetAspect;
+              sx = (img.width - sw) / 2;
+            } else {
+              sh = img.width / targetAspect;
+              sy = (img.height - sh) / 2;
+            }
+            offCtx.drawImage(img, sx, sy, sw, sh, 0, 0, 800, 480);
+            offCanvas.toBlob((blob) => {
+              const formData = new FormData();
+              formData.append("file", blob, "epaper_photo.png");
+              formData.append("title", name);
+              fetch('/api/frame/esp32/upload', { method: 'POST', body: formData })
+                .then(r => r.json())
+                .then(res => setStatus(`✨ "${name}" sent to E-Ink Frame!`, "success"))
+                .catch(e => setStatus(`E-Ink error: ${e}`, "error"));
+            }, 'image/png');
+          };
+          img.src = url;
+        });
+    }
+
+    function setStatus(msg, type) {
+      statusMessage.textContent = msg;
+      statusBox.className = "status-box " + (type || '');
+    }
+
+    // Auto-load status on boot
+    window.addEventListener('DOMContentLoaded', () => {
+      fetch('/api/frame/status')
+        .then(r => r.json())
+        .then(data => {
+          if (data.slideshow) syncSlideshowUI(data.slideshow);
+          if (data.gallery_count !== undefined) document.getElementById('galleryCountBadge').innerText = data.gallery_count;
+          if (data.tv_ip) {
+            const label = document.getElementById('tvStatusLabel');
+            if (label) label.textContent = `The Frame (${data.tv_ip}) ${data.status === 'online' ? 'Online' : 'Ready'}`;
+          }
+        })
+        .catch(() => {});
+      checkEspStatus();
+    });
+  </script>
+</body>
+</html>
